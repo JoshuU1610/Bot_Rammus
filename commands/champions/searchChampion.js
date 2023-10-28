@@ -1,10 +1,27 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { riotKey } = require('../../utils/riotApi');
 const { default: axios } = require('axios');
 
+const createEmbed = (name, description, champUrl, title, atips, etips, tags) => {
+  const exampleEmbed = new EmbedBuilder()
+    .setColor('#EAEE19')
+    .setTitle(name)
+    .setDescription(title)
+    .setThumbnail(champUrl)
+    .addFields(
+      { name: 'Tipo de campeon', value: `${tags}` },
+      { name: 'Lore', value: `${description}` },
+      { name: 'Tips para jugar con el', value: `${atips}` },
+      { name: 'Tips para jugar contra el', value: `${etips}` },
+    );
+  return exampleEmbed;
+};
+
+
+
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('buscar-campeon')
+    .setName('search-champs')
     .setDescription('Busca cualquier campeon')
     .addStringOption(
       Option =>
@@ -15,32 +32,48 @@ module.exports = {
     ),
   async execute(interaction) {
     try {
-      const champion = `${interaction.options.getString('campeon')}.json`;
-      console.log(champion);
+      const champion = interaction.options.getString('campeon');
+      let championFormatted = '';
+      if (champion) {
+        championFormatted = champion.charAt(0).toUpperCase() + champion.slice(1).toLowerCase();
+        championFormatted = championFormatted.toString();
+        console.log(championFormatted);
+      }
       const version = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
       const versionActual = version.data[0];
-      console.log(versionActual);
-      const dataGeneral = `http://ddragon.leagueoflegends.com/cdn/${versionActual}/data/es_MX/champion/`;
+      const verString = versionActual.toString();
+      const dataGeneral = `http://ddragon.leagueoflegends.com/cdn/${verString}/data/es_MX/champion/${championFormatted}.json`;
+      console.log(dataGeneral);
       const api_key = riotKey();
-      const response = await axios.get(`${dataGeneral}/${champion}`, {
+      const response = await axios.get(`${dataGeneral}`, {
         headers: {
           'X-Riot-Token': api_key,
         },
       });
-      console.log(response);
-      if (response.status === 200) {
-        const champData = response.data;
-        console.log(champData);
-        // const embed = createEmbed(name, level, iconUrl);
-        await interaction.reply('vas bien');
-      } else {
-        console.error('Error al obtener datos del invocador.');
-        await interaction.reply('Error al obtener datos del invocador.');
+      const dataChamp = response.data.data[championFormatted];
+      console.log(dataChamp);
+      const nameChamp = dataChamp.name;
+      const imgChamp = `http://ddragon.leagueoflegends.com/cdn/13.21.1/img/champion/${dataChamp.image.full}`;
+      const loreChamp = dataChamp.lore;
+      const titleChamp = dataChamp.title;
+      let allyTips = dataChamp.allytips;
+      let enemyTips = dataChamp.enemytips;
+      if (!allyTips || allyTips.length === 0) {
+        allyTips = 'No hay información';
       }
-
+      if (!enemyTips || enemyTips.length === 0) {
+        enemyTips = 'No hay información';
+      }
+      const champTags = dataChamp.tags;
+      const embed = createEmbed(nameChamp, loreChamp, imgChamp, titleChamp, allyTips, enemyTips, champTags);
+      await interaction.reply({ embeds: [embed] });
     } catch (error) {
       console.log(error);
-      await interaction.reply('hubo un error');
+      if (error.code === 'ERR_BAD_REQUEST') {
+        await interaction.reply('Este campeon no existe');
+      } else {
+        await interaction.reply('error');
+      }
     }
   },
 };
