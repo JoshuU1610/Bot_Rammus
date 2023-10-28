@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, inlineCode } = require('discord.js');
 const { getUserMention } = require('../../utils/discordUtils');
 const db = require('../../database');
-const getSummoner = require('../Lol/getSummoner');
+const { getSummoner } = require('../../utils/dbUtils');
 
 module.exports = {
   data: new SlashCommandBuilder()
