@@ -43,8 +43,6 @@ module.exports = {
         const name = summonerData.name;
         const level = summonerData.summonerLevel;
         const iconUrl = `http://ddragon.leagueoflegends.com/cdn/${versionActual}/img/profileicon/${summonerData.profileIconId}.png`;
-        const matchlistUrl = `https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${name}`;
-        console.log(matchlistUrl);
         const embed = createEmbed(name, level, iconUrl);
         await interaction.reply({ embeds: [embed] });
       } else {
