@@ -30,7 +30,7 @@ module.exports = {
       console.log(response);
       if (response.status === 200) {
         const champData = response.data;
-        // console.log(champData);
+        console.log(champData);
         // const embed = createEmbed(name, level, iconUrl);
         await interaction.reply('vas bien');
       } else {
