@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, inlineCode } = require('discord.js');
 const { getUserMention } = require('../../utils/discordUtils');
 const db = require('../../database');
 
@@ -19,7 +19,7 @@ module.exports = {
       const name = interaction.options.getString('invocador');
       const statment = 'INSERT INTO summoner (user_id, summoner) VALUES (?,?)';
       db.prepare(statment).run(interaction.user.id, name);
-      await interaction.reply(`${userMention} se registro ${name} como tu nombre de invocador asociado`);
+      await interaction.reply(`${userMention} se registro ${inlineCode(name)} como tu nombre de invocador asociado`);
     } catch (error) {
       console.log(error);
       switch (error.code) {

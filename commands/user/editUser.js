@@ -27,12 +27,11 @@ module.exports = {
 
       const editStatment = `
         UPDATE summoner
-        set name = ?
+        set summoner = ?
         WHERE user_id = ?
       `;
       db.prepare(editStatment).run(name,discordId);
-      const userUpdated = getSummoner(discordId);
-      await interaction.reply(`${userMention} tu invocador fue editado a: ${inlineCode(userUpdated.name)}`);
+      await interaction.reply(`${userMention} tu invocador fue editado a: ${inlineCode(name)}`);
     } catch (error) {
       console.log(error);
     }
