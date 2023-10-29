@@ -1,12 +1,12 @@
 const db = require('../database');
 
 
-const getSummoner = (id) => {
+const getSummoner = async (id) => {
   const searchstatment = `
         SELECT * FROM summoner
         WHERE user_id = ?
     `;
-  const user = db.prepare(searchstatment).get(id);
+  const user = await db.prepare(searchstatment).get(id);
   return user;
 };
 
