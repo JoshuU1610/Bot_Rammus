@@ -20,12 +20,13 @@ const callSummonerData = async (summoner) => {
   try {
     const response = await axios.get(url);
     const html = response.data;
+    console.log(html);
     // Crear un documento JSDOM para analizar el HTML
     const { window } = new JSDOM(html);
     const document = window.document;
     // Supongamos que deseas extraer el nombre del invocador, que se encuentra en un elemento con una clase específica.
-    const summonerName = document.querySelector('.tier').textContent; // Reemplaza '.summoner-name' con el selector correcto.
-    console.log('Nombre del invocador:', summonerName);
+    const summonerName = document.querySelector('body'); // Reemplaza '.summoner-name' con el selector correcto.
+    console.log(summonerName);
   } catch (error) {
     console.error('Error al realizar la solicitud HTTP:', error);
   }
