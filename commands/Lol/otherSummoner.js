@@ -8,20 +8,31 @@ const createEmbed = (name, level, iconUrl, data) => {
   console.log(data);
   const nameSoloq = data.dataSoloq.type;
   const nameFlex = data.dataFlex.type;
-  const eloSoloq = `${data.dataSoloq.tier} ${data.dataSoloq.division}`;
-  const lpSoloq = `${data.dataSoloq.lp} lp`;
-  const eloFlex = `${data.dataFlex.tier} ${data.dataFlex.division}`;
-  const lpFlex = `${data.dataFlex.lp} lp`;
+  let eloSoloq, lpSoloq, eloFlex, lpFlex;
+
+  if (data.dataSoloq.tier === null || data.dataSoloq.division === null || data.dataSoloq.lp === null) {
+    eloSoloq = 'Unranked';
+    lpSoloq = '0';
+  } else {
+    eloSoloq = `${data.dataSoloq.tier} ${data.dataSoloq.division}`;
+    lpSoloq = `${data.dataSoloq.lp} lp`;
+  }
+
+  if (data.dataFlex.tier === null || data.dataFlex.division === null || data.dataFlex.lp === null) {
+    eloFlex = 'Unranked';
+    lpFlex = '0';
+  } else {
+    eloFlex = `${data.dataFlex.tier} ${data.dataFlex.division}`;
+    lpFlex = `${data.dataFlex.lp} lp`;
+  }
   const exampleEmbed = new EmbedBuilder()
     .setColor('#EAEE19')
     .setTitle(name)
     .setThumbnail(iconUrl)
     .addFields(
-      { name: 'Level', value: `${level}`, inline: true },
-      { name: `${nameSoloq}`, value: `${eloSoloq}`, inline: true },
-      { name: 'LP', value: `${lpSoloq}`, inline: true },
-      { name: `${nameFlex}`, value: `${eloFlex}`, inline: true },
-      { name: 'LP', value: `${lpFlex}`, inline: true },
+      { name: 'Level', value: `${level}` },
+      { name: `${nameSoloq}`, value: `${eloSoloq}  ${lpSoloq}` },
+      { name: `${nameFlex}`, value: `${eloFlex}  ${lpFlex}` },
     );
   return exampleEmbed;
 };
