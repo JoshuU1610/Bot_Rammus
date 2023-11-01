@@ -1,5 +1,5 @@
 const riotKey = () => {
-  const apiKey = 'RGAPI-61d3c76c-5df5-4b02-8d00-db6d8e21d14c';
+  const apiKey = 'RGAPI-55819386-f7db-45d7-a11a-a554dccda298';
   return apiKey;
 };
 
