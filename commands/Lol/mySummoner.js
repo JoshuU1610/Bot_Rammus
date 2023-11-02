@@ -2,7 +2,7 @@ const { default: axios } = require('axios');
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { riotKey } = require('../../utils/riotApi');
 const { getSummoner } = require('../../utils/dbUtils');
-const { callSummonerData } = require('../../utils/dataOpgg');
+const { callSummonerData } = require('../../utils/dataRanked');
 
 const createEmbed = (name, level, iconUrl, data) => {
   console.log(data);
@@ -32,10 +32,8 @@ const createEmbed = (name, level, iconUrl, data) => {
     .setThumbnail(iconUrl)
     .addFields(
       { name: 'Level', value: `${level}` },
-      { name: `${nameSoloq}`, value: `${eloSoloq}`, inline: true },
-      { name: 'LP', value: `${lpSoloq}` },
-      { name: `${nameFlex}`, value: `${eloFlex}`, inline: true },
-      { name: 'LP', value: `${lpFlex}`, inline: true },
+      { name: `${nameSoloq}`, value: `${eloSoloq} - ${lpSoloq}` },
+      { name: `${nameFlex}`, value: `${eloFlex} - ${lpFlex}` },
     );
   return exampleEmbed;
 };
@@ -66,9 +64,8 @@ module.exports = {
         const name = summonerData.name;
         const level = summonerData.summonerLevel;
         const iconUrl = `http://ddragon.leagueoflegends.com/cdn/${versionActual}/img/profileicon/${summonerData.profileIconId}.png`;
-        const finalData = await callSummonerData(summoner_name.summoner);
+        const finalData = await callSummonerData(summoner_name);
         const embed = createEmbed(name, level, iconUrl, finalData);
-
         await interaction.editReply({ embeds: [embed] });
       }
     } catch (error) {
