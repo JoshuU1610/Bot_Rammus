@@ -12,8 +12,11 @@ const createUsersTable = async () => {
     const statementCreatesummonerTable = `
     CREATE TABLE IF NOT EXISTS summoner (
       user_id TEXT PRIMARY KEY,
-      summoner TEXT NOT NULL
-    )
+      summoner TEXT NOT NULL,
+      summ_id TEXT NOT NULL,
+      puuid_id TEXT NOT NULL,
+      account_Id TEXT NOT NULL
+    );    
     `;
     const createsummonerTable = db.prepare(statementCreatesummonerTable);
     createsummonerTable.run();
