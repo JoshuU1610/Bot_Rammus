@@ -15,7 +15,7 @@ const summonerData = async (summoner) => {
       name: summonerData.name,
       level: summonerData.summonerLevel,
       icon: summonerData.profileIconId,
-      summid: summonerData.id,
+      summ_id: summonerData.id,
       accountid: summonerData.accountId,
       puuid: summonerData.puuid
     };
