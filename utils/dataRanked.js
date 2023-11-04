@@ -20,27 +20,85 @@ const callSummonerData = async (summonerData) => {
       },
     });
     const dataRiot = response.data;
+
     const soloq = dataRiot[1];
     const flex = dataRiot[0];
-    const dataSoloq = {
-      type: 'Solo-Duo',
-      tier: capitalizeFirstLetter(soloq.tier),
-      division: soloq.rank,
-      lp: soloq.leaguePoints,
-      wins: soloq.wins,
-      lose: soloq.losses
+    let dataSoloq = {};
+    let dataFlex = {};
 
-    };
+    if (dataRiot.length === 0) {
+      dataSoloq = {
+        type: 'Solo-Duo',
+        tier: 'Unranked',
+        division: ' ',
+        lp: 0,
+        wins: 0,
+        lose: 0
+      };
 
-    const dataFlex = {
-      type: 'Flex',
-      tier: capitalizeFirstLetter(flex.tier),
-      division: flex.rank,
-      lp: flex.leaguePoints,
-      wins: flex.wins,
-      lose: flex.losses
-    };
+      dataFlex = {
+        type: 'Flex',
+        tier: 'Unranked',
+        division: ' ',
+        lp: 0,
+        wins: 0,
+        lose: 0
+      };
+    } else if (dataRiot[0].queueType === 'RANKED_FLEX_SR' && !dataRiot[1]) {
+      dataSoloq = {
+        type: 'Solo-Duo',
+        tier: 'Unranked',
+        division: ' ',
+        lp: 0,
+        wins: 0,
+        lose: 0
+      };
 
+      dataFlex = {
+        type: 'Flex',
+        tier: capitalizeFirstLetter(flex.tier),
+        division: flex.rank,
+        lp: flex.leaguePoints,
+        wins: flex.wins,
+        lose: flex.losses
+      };
+    } else if (dataRiot[0].queueType === 'RANKED_SOLO_5x5' && !dataRiot[1]) {
+      dataFlex = {
+        type: 'Solo-Duo',
+        tier: 'Unranked',
+        division: ' ',
+        lp: 0,
+        wins: 0,
+        lose: 0
+      };
+
+      dataSoloq = {
+        type: 'Solo-Duo',
+        tier: capitalizeFirstLetter(soloq.tier),
+        division: soloq.rank,
+        lp: soloq.leaguePoints,
+        wins: soloq.wins,
+        lose: soloq.losses
+      };
+    } else {
+      dataSoloq = {
+        type: 'Solo-Duo',
+        tier: capitalizeFirstLetter(soloq.tier),
+        division: soloq.rank,
+        lp: soloq.leaguePoints,
+        wins: soloq.wins,
+        lose: soloq.losses
+      };
+
+      dataFlex = {
+        type: 'Flex',
+        tier: capitalizeFirstLetter(flex.tier),
+        division: flex.rank,
+        lp: flex.leaguePoints,
+        wins: flex.wins,
+        lose: flex.losses
+      };
+    }
     const finalData = {
       dataSoloq,
       dataFlex
@@ -50,5 +108,6 @@ const callSummonerData = async (summonerData) => {
     console.error('Error al realizar la solicitud:', error);
   }
 };
+
 
 module.exports = { callSummonerData };
