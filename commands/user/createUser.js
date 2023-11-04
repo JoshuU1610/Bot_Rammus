@@ -22,7 +22,7 @@ module.exports = {
       const data = await summonerData(name);
       console.log(data);
       const statment = 'INSERT INTO summoner (user_id, summoner, summ_id, puuid_id, account_Id) VALUES (?,?,?,?,?)';
-      db.prepare(statment).run(interaction.user.id, data.name, data.summid, data.puuid, data.accountid);
+      db.prepare(statment).run(interaction.user.id, data.name, data.summ_id, data.puuid, data.accountid);
       await interaction.editReply(`${userMention} se registro ${inlineCode(data.name)} como tu nombre de invocador asociado`);
     } catch (error) {
       console.log(error);
