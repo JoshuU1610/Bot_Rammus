@@ -3,9 +3,9 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { riotKey } = require('../../utils/riotApi');
 const { getSummoner } = require('../../utils/dbUtils');
 const { callSummonerData } = require('../../utils/dataRanked');
+const { masteryChampsSummoner } = require('../../utils/masteryChamps');
 
-const createEmbed = (name, level, iconUrl, data) => {
-  console.log(data);
+const createEmbed = (name, level, iconUrl, data, champ) => {
   const nameSoloq = data.dataSoloq.type;
   const nameFlex = data.dataFlex.type;
   let eloSoloq, lpSoloq, eloFlex, lpFlex;
@@ -34,6 +34,10 @@ const createEmbed = (name, level, iconUrl, data) => {
       { name: 'Level', value: `${level}` },
       { name: `${nameSoloq}`, value: `${eloSoloq} - ${lpSoloq}` },
       { name: `${nameFlex}`, value: `${eloFlex} - ${lpFlex}` },
+      { name: 'Info extra', value: 'campeones mas jugados' },
+      { name: `${champ[0].champion} - m${champ[0].mastery}`, value: `${champ[0].points} puntos` },
+      { name: `${champ[1].champion} - m${champ[1].mastery}`, value: `${champ[1].points} puntos` },
+      { name: `${champ[2].champion} - m${champ[2].mastery}`, value: `${champ[2].points} puntos` },
     );
   return exampleEmbed;
 };
@@ -51,6 +55,7 @@ module.exports = {
       const versionActual = version.data[0];
       const discordId = interaction.user.id;
       const summoner_name = await getSummoner(discordId);
+      const champ = await masteryChampsSummoner(summoner_name.summ_id);
 
       if (!summoner_name) {
         await interaction.editReply('No tienes ningún invocador asociado a tu cuenta');
@@ -65,7 +70,7 @@ module.exports = {
         const level = summonerData.summonerLevel;
         const iconUrl = `http://ddragon.leagueoflegends.com/cdn/${versionActual}/img/profileicon/${summonerData.profileIconId}.png`;
         const finalData = await callSummonerData(summoner_name);
-        const embed = createEmbed(name, level, iconUrl, finalData);
+        const embed = createEmbed(name, level, iconUrl, finalData,champ);
         await interaction.editReply({ embeds: [embed] });
       }
     } catch (error) {
