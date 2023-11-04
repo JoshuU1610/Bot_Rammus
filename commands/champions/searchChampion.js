@@ -34,11 +34,32 @@ module.exports = {
     try {
       const champion = interaction.options.getString('campeon');
       let championFormatted = '';
+
       if (champion) {
-        championFormatted = champion.charAt(0).toUpperCase() + champion.slice(1).toLowerCase();
-        championFormatted = championFormatted.toString();
-        console.log(championFormatted);
+        const championWords = champion.split(' ');
+
+        for (let i = 0; i < championWords.length; i++) {
+          const word = championWords[i];
+
+          if (i === 0) {
+            championFormatted += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          } else {
+            championFormatted += word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          }
+        }
+
+        championFormatted = championFormatted.replace(/[^a-zA-Z0-9]+/g, '');
+
+        if (championFormatted === 'NunuYWillump') {
+          championFormatted = 'Nunu';
+        }
+
+        console.log('championFormatted (inside if):', championFormatted);
       }
+
+      console.log('championFormatted (after if):', championFormatted);
+
+
       const version = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
       const versionActual = version.data[0];
       const verString = versionActual.toString();
