@@ -17,7 +17,7 @@ const summonerData = async (summoner) => {
       icon: summonerData.profileIconId,
       summ_id: summonerData.id,
       accountid: summonerData.accountId,
-      puuid: summonerData.puuid
+      puuid_id: summonerData.puuid
     };
     return data;
   } catch (error) {
