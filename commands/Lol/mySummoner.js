@@ -4,6 +4,7 @@ const { riotKey } = require('../../utils/riotApi');
 const { getSummoner } = require('../../utils/dbUtils');
 const { callSummonerData } = require('../../utils/dataRanked');
 const { masteryChampsSummoner } = require('../../utils/masteryChamps');
+const { lastMatches } = require('../../utils/lastMatches');
 
 const createEmbed = (name, level, iconUrl, data, champ) => {
   const nameSoloq = data.dataSoloq.type;
@@ -56,6 +57,7 @@ module.exports = {
       const discordId = interaction.user.id;
       const summoner_name = await getSummoner(discordId);
       const champ = await masteryChampsSummoner(summoner_name.summ_id);
+      const lastfivematchs = await lastMatches(summoner_name);
 
       if (!summoner_name) {
         await interaction.editReply('No tienes ningún invocador asociado a tu cuenta');
